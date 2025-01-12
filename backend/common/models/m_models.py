@@ -25,4 +25,16 @@ class PostContent(UUIDModelMixin, TimeStampModelMixin, models.Model):
     
     class Meta:
         db_table = "post_content"
+        
 
+class Group(UUIDModelMixin, models.Model):
+    name = models.CharField(max_length=100)
+    class Meta:
+        db_table = "group" 
+        
+        
+class GroupMembership(models.Model):
+    user = models.OneToOneField(MUser, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    class Meta:
+        db_table = "group_membership"
