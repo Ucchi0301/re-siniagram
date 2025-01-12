@@ -18,8 +18,9 @@ class PostListView(APIView):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(created_by=request.user)
-            return Response(status=status.HTTP_200_OK ,data=serializer.data)
-        return Response(serializer.errors)
+            return Response(status=status.HTTP_201_CREATED, data=serializer.data) 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     
 class PostDetailView(APIView):
     permission_classes = [IsAuthenticated]

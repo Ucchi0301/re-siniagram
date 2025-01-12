@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Content</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% csrf_token %}  <!-- CSRFトークンをHTMLに埋め込む -->
+</head>
+<body>
+    <h1>Post Content</h1>
+
+    <!-- 投稿フォーム -->
+    <form id="post-form" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <br><br>
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        <br><br>
+
+        <button type="submit">Post</button>
+    </form>
+
+    <div id="post-list">
+        <!-- 投稿がここに表示されます -->
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // CSRFトークンを取得
+            var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
+
+            // 投稿作成
+            $('#post-form').on('submit', function(event) {
+                event.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/api/posts/',  // DjangoのURLパターン
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRFToken': csrftoken  // CSRFトークンをヘッダに追加
+                    },
+                    success: function(data) {
+                        // 成功時に投稿をリストに追加
+                        loadPosts();
+                        $('#title').val('');  // フォームをリセット
+                        $('#image').val('');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Ajax Error: " + error);
+                    }
+                });
+            });
+
+            // 投稿リストをロード
+            function loadPosts() {
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/api/posts/',  // DjangoのURLパターン
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#post-list').empty();  // 既存の投稿内容をクリア
+
+                        data.forEach(function(post) {
+                            var postHtml = `
+                                <div class="post">
+                                    <h2>${post.title}</h2>
+                                    <img src="${post.image}" alt="${post.title}" width="200">
+                                    <p>Created by: ${post.createdBy.username}</p>
+                                </div>
+                            `;
+                            $('#post-list').append(postHtml);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Ajax Error: " + error);
+                    }
+                });
+            }
+
+            // ページ読み込み時に投稿をロード
+            loadPosts();
+        });
+    </script>
+</body>
+</html>
