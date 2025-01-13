@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from api.serializers.post_serializer import PostSerializer
 from rest_framework import status
 
-from common.models import PostContent, GroupMembership, Group
+from common.models import PostContent, GroupMembership
 
 from ..permissions import IsInGroup
 
@@ -74,6 +74,8 @@ class RandomPostView(APIView):
 
     def get(self, request):
         group_users = get_group_users(request.user)
-        queryset = PostContent.objects.filter(created_by__in=group_users).order_by("?").first()
+        queryset = (
+            PostContent.objects.filter(created_by__in=group_users).order_by("?").first()
+        )
         serializer = PostSerializer(queryset)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
