@@ -24,6 +24,16 @@ class UserDetailView(APIView):
 
         serializer = UserPublicSerializer(user)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+    
+    def put(self, request, pk):
+        user = MUser.objects.get(pk=pk)
+        if user != request.user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # ユーザーの投稿一覧取得

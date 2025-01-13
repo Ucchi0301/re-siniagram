@@ -16,7 +16,7 @@ urlpatterns = [
         name="post",
     ),
         path(
-        "group/create/",
+        "group/",
         TemplateView.as_view(template_name="group_create.html"),
         name="post",
     ),
