@@ -1,6 +1,10 @@
 from django.urls import path
 from api.controllers.post_controller import PostListView, PostDetailView, RandomPostView
-from api.controllers.group_controller import GroupListView, JoinGroupView, GroupUserListView   
+from api.controllers.group_controller import (
+    GroupListView,
+    JoinGroupView,
+    GroupUserListView,
+)
 
 urlpatterns = [
     path("posts/", PostListView.as_view(), name="home"),
