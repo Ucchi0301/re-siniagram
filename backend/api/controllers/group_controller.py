@@ -23,7 +23,7 @@ class UserJoiningGroupView(APIView):
         if group_membership is None:
             raise UserNotInGroupException
         group = group_membership.group
-        serializer = GroupSerializer(group) 
+        serializer = GroupSerializer(group)
         return Response(data=serializer.data)
 
 

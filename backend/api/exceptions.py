@@ -6,10 +6,12 @@ class GroupAlreadyJoinedException(APIException):
     default_detail = "すでにグループに参加しています"
     default_code = "group_already_joined"
 
+
 class UserNotInGroupException(APIException):
     status_code = 400
     default_detail = "グループに所属していません"
     default_code = "user_not_in_group"
+
 
 class GroupNotFoundException(APIException):
     status_code = 404
