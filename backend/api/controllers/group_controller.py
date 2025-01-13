@@ -34,9 +34,12 @@ class GroupCreateView(APIView):
     def post(self, request):
         serializer = GroupSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data)
-        return Response(serializer.errors)
+            group = serializer.save()
+            # ユーザーを作成したグループに自動で参加させる
+            GroupMembership.objects.create(user=request.user, group=group)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # グループに参加
