@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.serializers.post_serializer import PostSerializer
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 
 from common.models import PostContent, GroupMembership
 
@@ -20,14 +21,17 @@ def get_group_users(user) -> list:
 
 # 投稿一覧取得
 class PostListView(APIView):
-
+    
     permission_classes = [IsInGroup]
+    pagination_class = PageNumberPagination
 
     def get(self, request):
         group_users = get_group_users(request.user)
         queryset = PostContent.objects.filter(created_by__in=group_users)
-        serializer = PostSerializer(queryset, many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = PostSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 # 投稿作成
