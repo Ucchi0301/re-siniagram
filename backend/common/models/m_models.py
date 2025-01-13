@@ -9,7 +9,7 @@ from api.utils.image_compression import compress_image_to_webp
 
 class MUser(AbstractBaseUser, PermissionsMixin, UUIDModelMixin, TimeStampModelMixin):
     username = models.CharField(max_length=255)
-    avatar = models.ImageField()
+    avatar = models.ImageField(blank=True, null=True)
     email = models.EmailField(unique=True)
 
     objects = UserManager()
@@ -20,7 +20,7 @@ class MUser(AbstractBaseUser, PermissionsMixin, UUIDModelMixin, TimeStampModelMi
     def save(self, *args, **kwargs):
         if self.avatar:
             self.image = compress_image_to_webp(self.image)
-        super(PostContent, self).save(*args, **kwargs)
+        super(MUser, self).save(*args, **kwargs)
 
     class Meta:
         db_table = "m_user"

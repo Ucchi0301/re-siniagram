@@ -30,7 +30,10 @@ def compress_image_to_webp(image):
     img.save(image_io, format="WEBP", quality=10)
     image_io.seek(0)
 
-    # 圧縮後の画像を返す
+    # ファイル名を変更してWebP拡張子を追加
+    webp_image_name = image.name.rsplit('.', 1)[0] + '.webp'
+
+    # 圧縮後の画像を返す（ファイル名をwebpに変更）
     return InMemoryUploadedFile(
-        image_io, None, image.name, "image/webp", image_io.tell(), None
+        image_io, None, webp_image_name, "image/webp", image_io.tell(), None
     )
