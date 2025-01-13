@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework import status
 from rest_framework.response import Response
 from common.models import Group, GroupMembership
 from rest_framework.permissions import IsAuthenticated
@@ -7,17 +8,22 @@ from api.exceptions import (
     GroupAlreadyJoinedException,
     GroupNotFoundException,
     PasswordOrIdException,
+    UserNotInGroupException,
 )
 from ..permissions import IsInGroup
 
 
-# グループを取得 管理者のみに設定する必要ありか不必要
-class GroupListView(APIView):
-    permission_classes = [IsInGroup]
+# ユーザーが所属しているグループ情報を取得
+class UserJoiningGroupView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        queryset = Group.objects.all()
-        serializer = GroupSerializer(queryset, many=True)
+        group_membership = GroupMembership.objects.filter(user=request.user).first()
+        # グループに所属していない場合
+        if group_membership is None:
+            raise UserNotInGroupException
+        group = group_membership.group
+        serializer = GroupSerializer(group) 
         return Response(data=serializer.data)
 
 
@@ -66,3 +72,13 @@ class GroupUserListView(APIView):
         memberships = GroupMembership.objects.filter(group_id=group_id)
         serializer = GroupMembershipSerializer(memberships, many=True)
         return Response(serializer.data)
+
+
+# テスト用にグループに所属している状態を削除
+class GroupUserDeleteView(APIView):
+    permission_classes = [IsInGroup]
+
+    def delete(self, request):
+        group_membership = GroupMembership.objects.filter(user=request.user).first()
+        group_membership.delete()
+        return Response(status=status.HTTP_200_OK)
