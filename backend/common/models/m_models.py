@@ -6,6 +6,7 @@ from django.contrib.auth.models import UserManager
 
 from api.utils.image_compression import compress_image_to_webp
 
+
 class MUser(AbstractBaseUser, PermissionsMixin, UUIDModelMixin, TimeStampModelMixin):
     username = models.CharField(max_length=255)
     avatar = models.ImageField()
@@ -14,7 +15,7 @@ class MUser(AbstractBaseUser, PermissionsMixin, UUIDModelMixin, TimeStampModelMi
     objects = UserManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-    
+
     # 画像をwebp形式に変換して保存
     def save(self, *args, **kwargs):
         if self.avatar:
@@ -31,7 +32,7 @@ class PostContent(UUIDModelMixin, TimeStampModelMixin, models.Model):
     created_by = models.ForeignKey(
         MUser, related_name="postcontent", on_delete=models.CASCADE
     )
-    
+
     # 画像をwebp形式に変換して保存
     def save(self, *args, **kwargs):
         if self.image:

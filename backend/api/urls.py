@@ -1,10 +1,10 @@
 from django.urls import path
 from api.controllers.post_controller import (
-    PostListView, 
+    PostListView,
     PostCreateView,
-    PostDetailView, 
+    PostDetailView,
     RandomPostView,
-    )
+)
 from api.controllers.group_controller import (
     UserJoiningGroupView,
     JoinGroupView,
