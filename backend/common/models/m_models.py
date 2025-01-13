@@ -31,11 +31,14 @@ class PostContent(UUIDModelMixin, TimeStampModelMixin, models.Model):
 
 class Group(UUIDModelMixin, models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
+    password = models.CharField(max_length=4)
 
     class Meta:
         db_table = "group"
 
 
+# 　グループの中間テーブル
 class GroupMembership(models.Model):
     user = models.OneToOneField(MUser, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)

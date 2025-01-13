@@ -11,3 +11,9 @@ class GroupNotFoundException(APIException):
     status_code = 404
     default_detail = "グループが見つかりません"
     default_code = "group_not_found"
+
+
+class PasswordOrIdException(APIException):
+    status_code = 400
+    default_detail = "パスワードかIDが間違っています"
+    default_code = "password_or_id_error"
