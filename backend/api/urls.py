@@ -6,6 +6,7 @@ from api.controllers.post_controller import (
     RandomPostView,
 )
 from api.controllers.group_controller import (
+    IsUserInGroup,
     UserJoiningGroupView,
     JoinGroupView,
     GroupUserListView,
@@ -22,6 +23,7 @@ urlpatterns = [
     path("post/create/", PostCreateView.as_view(), name="create"),
     path("post/<uuid:pk>/", PostDetailView.as_view(), name="detail"),
     path("post/random/", RandomPostView.as_view(), name="random"),
+    path("is_in_group/", IsUserInGroup.as_view(), name="group"),
     path("group/", UserJoiningGroupView.as_view(), name="group"),
     path("group/create/", GroupCreateView.as_view(), name="group_create"),
     path("group/join/", JoinGroupView.as_view()),

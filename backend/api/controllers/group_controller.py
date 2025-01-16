@@ -1,8 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from common.models import Group, GroupMembership
 from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from common.models import Group, GroupMembership
 from ..serializers.group_serializer import GroupSerializer, GroupMembershipSerializer
 from api.exceptions import (
     GroupAlreadyJoinedException,
@@ -13,7 +15,29 @@ from api.exceptions import (
 from ..permissions import IsInGroup
 
 
+
+# ユーザーがグループに所属しているかを確認
+@swagger_auto_schema(
+        responses={status.HTTP_200_OK: openapi.Response("Success")},
+    )
+class IsUserInGroup(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        # ユーザーがグループに所属しているかを確認
+        group_membership = GroupMembership.objects.filter(user=request.user).first()
+        
+        # ユーザーがグループに所属している場合
+        if group_membership:
+            return Response({'is_user_in_group': True}, status=status.HTTP_200_OK)
+        
+        # ユーザーがグループに所属していない場合
+        return Response({'is_user_in_group': False}, status=status.HTTP_200_OK)
+
+
 # ユーザーが所属しているグループ情報を取得
+@swagger_auto_schema(
+        responses={status.HTTP_200_OK: openapi.Response("Success", GroupSerializer())},
+    )
 class UserJoiningGroupView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -28,6 +52,9 @@ class UserJoiningGroupView(APIView):
 
 
 # グループを作成
+@swagger_auto_schema(
+    responses={201: GroupSerializer()},
+)
 class GroupCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -43,6 +70,9 @@ class GroupCreateView(APIView):
 
 
 # グループに参加
+@swagger_auto_schema(
+    responses={200: GroupMembershipSerializer()},
+)
 class JoinGroupView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -66,6 +96,9 @@ class JoinGroupView(APIView):
 
 
 # グループに所属しているユーザーを取得
+@swagger_auto_schema(
+    responses={200: GroupMembershipSerializer(many=True)},
+)
 class GroupUserListView(APIView):
     permission_classes = [IsInGroup]
 
@@ -78,6 +111,9 @@ class GroupUserListView(APIView):
 
 
 # テスト用にグループに所属している状態を削除
+@swagger_auto_schema(
+    responses={200: "OK"},
+)
 class GroupUserDeleteView(APIView):
     permission_classes = [IsInGroup]
 
