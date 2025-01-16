@@ -27,7 +27,6 @@ class MUser(AbstractBaseUser, PermissionsMixin, UUIDModelMixin, TimeStampModelMi
 
 
 class PostContent(UUIDModelMixin, TimeStampModelMixin, models.Model):
-    title = models.CharField(max_length=255)
     image = models.ImageField(blank=True, null=True)
     created_by = models.ForeignKey(
         MUser, related_name="postcontent", on_delete=models.CASCADE
