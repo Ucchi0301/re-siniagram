@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from api.serializers.user_serializer import UserPublicSerializer, UserSerializer
 from api.serializers.post_serializer import PostSerializer
 from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
 
 from common.models import MUser, PostContent
 
@@ -10,6 +11,9 @@ from ..permissions import IsInGroup
 
 
 # ユーザー詳細取得
+@swagger_auto_schema(
+    responses={200: UserPublicSerializer()},
+)
 class UserDetailView(APIView):
 
     permission_classes = [IsInGroup]
@@ -37,6 +41,9 @@ class UserDetailView(APIView):
 
 
 # ユーザーの投稿一覧取得
+@swagger_auto_schema(
+    responses={200: PostSerializer()},
+)
 class UserListView(APIView):
 
     permission_classes = [IsInGroup]

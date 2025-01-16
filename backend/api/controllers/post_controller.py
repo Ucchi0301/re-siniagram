@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from api.serializers.post_serializer import PostSerializer
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
+from drf_yasg.utils import swagger_auto_schema
 
 from common.models import PostContent, GroupMembership
 
@@ -10,6 +11,9 @@ from ..permissions import IsInGroup
 
 
 # ユーザーが所属しているグループのユーザー一覧取得
+@swagger_auto_schema(
+    responses={200: PostSerializer()},
+)
 def get_group_users(user) -> list:
     group_membership = GroupMembership.objects.filter(user=user).first()
     group_id = group_membership.group.id
@@ -20,6 +24,9 @@ def get_group_users(user) -> list:
 
 
 # 投稿一覧取得
+@swagger_auto_schema(
+    responses={200: PostSerializer(many=True)},
+)
 class PostListView(APIView):
 
     permission_classes = [IsInGroup]
@@ -35,6 +42,9 @@ class PostListView(APIView):
 
 
 # 投稿作成
+@swagger_auto_schema(
+    responses={201: PostSerializer()},
+)
 class PostCreateView(APIView):
 
     permission_classes = [IsInGroup]
@@ -48,6 +58,9 @@ class PostCreateView(APIView):
 
 
 # 投稿詳細取得、更新、削除
+@swagger_auto_schema(
+    responses={200: PostSerializer()},
+)
 class PostDetailView(APIView):
 
     permission_classes = [IsInGroup]
@@ -72,6 +85,9 @@ class PostDetailView(APIView):
 
 
 # ランダムな投稿取得
+@swagger_auto_schema(
+    responses={200: PostSerializer()},
+)
 class RandomPostView(APIView):
 
     permission_classes = [IsInGroup]
