@@ -6,11 +6,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MUser
-        fields = ["id", "username", "avatar", "email"]
+        fields = ["id", "username", "avatar", "email", "click_count"]
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MUser
-        fields = ["username", "avatar"]
+        fields = ["username", "avatar", "click_count"]
