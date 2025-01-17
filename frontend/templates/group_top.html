@@ -1,0 +1,77 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>家族グループ管理</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        body {
+            background-color: #f9f8f6;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+        .title {
+            font-size: 24px; /* タイトルをさらに大きく */
+            font-weight: bold;
+            color: #4a4a4a;
+            margin-bottom: 20px; /* ボタンとの距離を適切に */
+        }
+        .subtitle {
+            font-size: 18px; /* サブタイトルも拡大 */
+            color: #6b6b6b;
+            margin-bottom: 30px; /* ボタンとの距離を広げる */
+            line-height: 1.5;
+        }
+        .btn-custom, .btn-custom-secondary {
+            width: 100%;
+            max-width: 320px;
+            padding: 14px;
+            font-size: 18px; /* ボタン文字サイズを少し大きく */
+            font-weight: bold;
+            border-radius: 6px;
+            margin-bottom: 20px; /* ボタン間の距離を広げる */
+            border: none;
+        }
+        .btn-custom {
+            margin-top: 50px; /* グループ作成ボタンとの距離を広げる */
+            background-color: #f4a261;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #e76f51;
+        }
+        .btn-custom-secondary {
+            background-color: #2a9d8f;
+            color: white;
+        }
+        .btn-custom-secondary:hover {
+            background-color: #21867a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">家族グループに参加しましょう！</div>
+        <div class="subtitle">
+            グループを作成すると自動で参加します。<br>
+            参加する場合はコードを入力してください。
+        </div>
+        <button onclick="window.location.href='/group_create/'" class="btn-custom">グループを作成する</button>
+        <button onclick="window.location.href='/group_join/'" class="btn-custom-secondary">グループに参加する</button>
+    </div>
+</body>
+</html>

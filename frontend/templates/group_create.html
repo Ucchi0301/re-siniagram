@@ -1,0 +1,111 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>グループ作成</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+        body {
+            background-color: #f9f8f6;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Flexboxを有効化 */
+            justify-content: center; /* 横方向中央揃え */
+            align-items: center; /* 縦方向中央揃え */
+            height: 100vh; /* ビューポート全体の高さ */
+        }
+        .container {
+            max-width: 500px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a4a4a;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            background-color: #f4a261;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 5px;
+            width: 100%;
+            border: none;
+        }
+        .btn-custom:hover {
+            background-color: #e76f51;
+        }
+        .form-label {
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">新しいグループを作成する</div>
+        <form id="group-form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">グループ名</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="グループ名を入力" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">パスワード</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="パスワードを入力" required>
+            </div>
+            <button type="submit" class="btn-custom">グループを作成する</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
+
+            // グループ作成フォーム送信
+            $('#group-form').on('submit', function(event) {
+                event.preventDefault();  // フォームのデフォルト動作を無効にする
+
+                var formData = {
+                    'name': $('#name').val(),
+                    'password': $('#password').val()
+                };
+
+                $.ajax({
+                    url: '/api/group/create/',  // グループ作成APIのURL
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRFToken': csrftoken  // CSRFトークンをヘッダに追加
+                    },
+                    success: function(data) {
+                        alert('グループが作成されました！');
+                        $('#name').val('');  // フォームをリセット
+                        $('#password').val('');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Ajax Error: " + error);
+                        alert('グループ作成に失敗しました。');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
