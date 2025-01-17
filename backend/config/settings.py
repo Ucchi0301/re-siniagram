@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from corsheaders.defaults import default_headers
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -10,8 +11,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*'] 
+CSRF_TRUSTED_ORIGINS = ["https://1068-2400-2410-3ac1-4000-abb-36d7-edf5-56f8.ngrok-free.app"]
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
@@ -27,11 +28,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'pwa',
     "django.contrib.sites",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    'django_bootstrap5',
+    'corsheaders',
     "rest_framework",
+    'drf_yasg',
     "django_boost",
     "common",
     "api",
@@ -59,6 +64,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -82,6 +89,9 @@ TEMPLATES = [
         },
     },
 ]
+
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -124,6 +134,9 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "frontend" / "static",
+]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
