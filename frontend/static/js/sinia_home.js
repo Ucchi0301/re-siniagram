@@ -19,7 +19,7 @@ function imageRotate() {
     } else {
         // 縦と横が同じ場合（正方形の画像）
         img.style.transform = 'none';  // 回転なし
-        img.style.width = '100%';      // 幅を75vhに設定
+        img.style.width = '100%';      // 幅を100%に設定
         img.style.height = 'auto';     // 高さを自動調整
     }
 };
@@ -28,57 +28,61 @@ function imageRotate() {
 function getCSRFToken() {
     return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 }
-$('#photo').on('load', function() {
-    imageRotate();
-});
 
 $(document).ready(function () {
-    const csrftoken = getCSRFToken(); // トークンを取得
+    const csrftoken = getCSRFToken(); // CSRFトークンを取得
 
-    // APIコールの共通関数
+    let isFetching = false; // リクエスト中フラグ
+
     function fetchRandomPost() {
         $.ajax({
             url: '/api/post/random/', // APIエンドポイント
-            type: 'GET', // GETリクエスト
+            type: 'GET',
             headers: {
-                'X-CSRFToken': csrftoken // CSRFトークンをヘッダーに設定
+                'X-CSRFToken': csrftoken
             },
             success: function (data) {
-                    if (data.image) {
-                        $('#photo').attr('src', data.image); // 画像URLを更新
-                    }
-                isFetching = false; // リクエスト完了後にフラグを解除
-                $('#fetchRandomPost').prop('disabled', false); // ボタンを有効にする
-                $('#photo').on('load', function() {
-                    imageRotate();
-                });
+                if (data.image) {
+                    $('#photo').attr('src', data.image);
+                }
+                isFetching = false; // フラグ解除
+                $('#fetchRandomPost').prop('disabled', false); // ボタンを有効化
             },
-            error: function (xhr, status, error) {
-                isFetching = false; // エラー時にもフラグを解除
-                $('#fetchRandomPost').prop('disabled', false); // ボタンを有効にする
+            error: function () {
+                isFetching = false; // フラグ解除
+                $('#fetchRandomPost').prop('disabled', false); // ボタンを有効化
             }
         });
     }
 
-    let isFetching = false;  // フラグを立ててリクエストが重複しないようにする
-
-    // ページが読み込まれたとき
+    // 初期ロード時にリクエストを実行
     fetchRandomPost();
 
-    // ボタンがクリックされたとき
-    $('#fetchRandomPost').on('click', function (event) {
-        // すでにリクエスト中なら処理をキャンセル
+    // 画像読み込み後に回転を適用
+    $('#photo').on('load', function() {
+        imageRotate();
+    });
+
+    // ボタンのクリックイベント
+    const button = $('#fetchRandomPost');
+
+    button.on('mousedown touchstart', function () {
+        $(this).addClass('pressed'); // 押した状態のクラスを追加
+    });
+
+    button.on('mouseup touchend', function () {
+        $(this).removeClass('pressed'); // 押した状態のクラスを削除
+    });
+
+    button.on('click', function (event) {
         if (isFetching) {
-            event.preventDefault(); // クリックイベントの処理を無効にする
+            event.preventDefault(); // リクエスト中は無効化
             return;
         }
-        
-        isFetching = true;  // フラグを立てて処理中にする
-        $('#fetchRandomPost').prop('disabled', true); // ボタンを無効にする
 
-        // リクエストを送信
-
-
+        isFetching = true; // フラグを設定
+        $(this).prop('disabled', true); // ボタンを無効化
+        fetchRandomPost();
     });
 
     // ボタン領域でのタッチイベントを監視

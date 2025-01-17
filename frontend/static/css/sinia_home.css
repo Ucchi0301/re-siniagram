@@ -44,8 +44,12 @@ body {
     border: none;
     cursor: pointer;
     height: 100%;
-    transform: scale(1); /* ズームしてもボタンのサイズを変えない */
-    pointer-events: auto; /* ズーム時でもボタンがクリックできるように */
+    transition: transform 0.2s ease, background-color 0.2s ease; /* アニメーションの設定 */
+}
+
+.button-container button:active {
+    transform: scale(0.9); /* ボタンを押したときに縮む */
+    background-color: #d40000; /* 色を少し暗くする */
 }
 
 /* 非クリックエリア */
@@ -55,4 +59,15 @@ body {
     height: 100%; /* コンテナの高さ全体 */
     background-color: #fffb00; /* 視覚的にわかる背景色 */
     pointer-events: none; /* クリックやタッチイベントを無効化 */
+}
+
+/* ボタンが押されていないときの基本のスタイル */
+#fetchRandomPost {
+    transition: transform 0.1s ease, box-shadow 0.1s ease; /* 変化を滑らかにする */
+}
+
+/* ボタンが押されたときのスタイル */
+#fetchRandomPost.pressed {
+    transform: translateY(50px); /* ボタンを4px下に沈ませる */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* より深い影 */
 }
