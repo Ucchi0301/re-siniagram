@@ -48,6 +48,32 @@ urlpatterns = [
         TemplateView.as_view(template_name="group_join.html"),
         name="post",
     ),
+    path(
+        "group_users/",
+        TemplateView.as_view(template_name="group_users.html"),
+        name="post",
+    ),
+    path(
+        "posts/",
+        TemplateView.as_view(template_name="posts.html"),
+        name="post",
+    ),
+    path(
+        "post/<uuid:id>/",
+        TemplateView.as_view(template_name="post_detail.html"),
+        name="post",
+    ),
+    path(
+        "user/<uuid:id>/",
+        TemplateView.as_view(template_name="user_content.html"),
+        name="post",
+    ),
+    path(
+        "test/",
+        TemplateView.as_view(template_name="test_top.html"),
+        name="post",
+    ),
+    
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0),
          name='schema-swagger-ui'),
 ]
