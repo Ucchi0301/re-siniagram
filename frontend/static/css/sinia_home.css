@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    position: relative;
+    height: 100vh; /* 画面全体の高さ */
+    overflow: hidden; /* コンテンツがはみ出さないように */
+}
+
+/* 画像 */
+.image-container {
+    width: 100%; /* 画面幅いっぱいに設定 */
+    height: 75vh; /* ボタンとタイトルを除いた高さ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 35vh; /* ボタンの高さ分を引いた領域 */
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%; /* 画像がコンテナの高さにぴったりフィットする */
+    object-fit: cover; /* 画像の縦横比を保ちつつ、枠に収める */
+    border: 2px solid red; /* 画像のボーダー */
+}
+
+/* タイトル */
+.title-container {
+    width: 100%;
+    height: 10vh; /* タイトルの高さ */
+    text-align: center;
+    padding: 15px 0;
+    font-size: 60px;
+    font-weight: bold;
+    position: fixed;
+    bottom: 20vh; /* ボタンの上に20vh分だけ配置 */
+    left: 0;
+    right: 0;
+    background-color: white; /* 背景色を設定して可読性を高める */
+    border: 2px solid green; /* ボーダーを追加 */
+}
+
+/* ボタンエリア */
+.button-container {
+    width: 100%;
+    height: 20vh; /* ボタンの縦幅 */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex; /* フレックスボックスで配置 */
+    align-items: center; /* ボタンと非クリックエリアを中央揃え */
+}
+
+/* ボタン */
+.button-container button {
+    flex: 1; /* ボタンが中央に広がる */
+    font-size: 45px;
+    font-weight: bold;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    height: 100%;
+}
+
+/* 非クリックエリア */
+.non-clickable-area-left,
+.non-clickable-area-right {
+    width: 30px; /* 幅50pxの非クリックエリア */
+    height: 100%; /* コンテナの高さ全体 */
+    background-color: #fffb00; /* 視覚的にわかる背景色 */
+    pointer-events: none; /* クリックやタッチイベントを無効化 */
+}
