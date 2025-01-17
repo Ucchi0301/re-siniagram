@@ -97,5 +97,7 @@ class RandomPostView(APIView):
         queryset = (
             PostContent.objects.filter(created_by__in=group_users).order_by("?").first()
         )
+        request.user.click_count += 1
+        request.user.save()
         serializer = PostSerializer(queryset)
         return Response(status=status.HTTP_200_OK, data=serializer.data)

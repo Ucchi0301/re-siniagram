@@ -11,10 +11,16 @@ class MUser(AbstractBaseUser, PermissionsMixin, UUIDModelMixin, TimeStampModelMi
     username = models.CharField(max_length=255)
     avatar = models.ImageField(blank=True, null=True)
     email = models.EmailField(unique=True)
+    click_count = models.IntegerField(default=0)
 
     objects = UserManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+    
+    def increment_count(self):
+        self.click_count += 1
+        print(self.click_count)
+        self.save()
 
     # 画像をwebp形式に変換して保存
     def save(self, *args, **kwargs):
