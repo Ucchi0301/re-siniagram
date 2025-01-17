@@ -11,11 +11,16 @@ function imageRotate() {
         img.style.transform = 'rotate(90deg)';
         img.style.width = '80vh';  // 回転後の横幅を画面いっぱいに設定
         img.style.height = 'auto';  // 高さも100%に設定
-    } else {
+    } else if (width < height) {
         // 縦向きの画像の場合: そのまま表示
         img.style.transform = 'none';
-        img.style.width = '100vw';   // 幅を画面いっぱいに
-        img.style.height = 'auto';  // 高さも100%に設定
+        img.style.width = 'auto';   // 幅を画面いっぱいに
+        img.style.height = '80vh';  // 高さも100%に設定
+    } else {
+        // 縦と横が同じ場合（正方形の画像）
+        img.style.transform = 'none';  // 回転なし
+        img.style.width = '100%';      // 幅を75vhに設定
+        img.style.height = 'auto';     // 高さを自動調整
     }
 };
 
@@ -116,10 +121,4 @@ $(document).ready(function () {
             event.preventDefault(); // クリックイベントでリクエストを送らない
         }
     });
-});
-
-
-// ズームのトグル機能
-document.querySelector('.image-container img').addEventListener('click', function() {
-    this.classList.toggle('zoomed');  // 画像に`zoomed`クラスを追加・削除
 });

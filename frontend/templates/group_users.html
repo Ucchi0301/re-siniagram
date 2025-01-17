@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>グループユーザー一覧</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/group_users.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>グループ情報</h1>
+        <div id="group-info">
+            <!-- グループ情報がここに表示されます -->
+        </div>
+
+        <h2>グループ参加者</h2>
+        <div id="user-list" class="user-list">
+            <!-- ユーザー情報がここに追加されます -->
+        </div>
+    </div>
+
+    <script src="{% static 'js/group_users.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#post-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.post-card {
+    background: #fff;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.post-info p {
+    margin: 5px 0;
+}
+
+.post-card:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}

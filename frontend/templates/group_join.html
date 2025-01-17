@@ -56,12 +56,16 @@
             border-radius: 5px;
             border: 1px solid #ddd;
         }
+
+        /* 最初は非表示 */
+        #content {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <!-- グループ参加フォーム -->
-    <div class="container">
+    <div id="content" class="container">
         <div class="title">グループに参加する</div>
         <form id="join-group-form">
             {% csrf_token %}
@@ -81,6 +85,29 @@
     <script>
         $(document).ready(function() {
             var csrftoken = $("input[name=csrfmiddlewaretoken]").val();
+
+            // ページ読み込み時にグループ参加状況を確認
+            $.ajax({
+                url: '/api/is_in_group/',  // APIのURL
+                type: 'GET',
+                headers: {
+                    'accept': 'application/json',
+                    'X-CSRFTOKEN': csrftoken,
+                },
+                success: function(data) {
+                    // ユーザーがグループに参加している場合は/test/にリダイレクト
+                    if (data.isUserInGroup) {
+                        window.location.href = '/test/';
+                    } else {
+                        // グループに参加していない場合、フォームを表示
+                        $('#content').show();
+                    }
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                    alert('グループ参加状態の確認に失敗しました。');
+                }
+            });
 
             // グループ参加フォーム送信
             $('#join-group-form').on('submit', function(event) {

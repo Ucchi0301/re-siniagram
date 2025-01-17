@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>スマホUI</title>
-        {% load static %}
-        <!-- jQueryの読み込み -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link rel="stylesheet" href="{% static 'css/sinia_home.css' %}">
-        <!-- CSRFトークンをmetaタグで埋め込む -->
-        <meta name="csrf-token" content="{{ csrf_token }}">
-    </head>
-<body>
+{% extends "base.html" %}
+{% load static %}  <!-- staticタグを読み込む -->
+{% block title %}スマホUI{% endblock %}
+
+{% block content %}
+    <!-- jQueryの読み込み -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="{% static 'css/sinia_home.css' %}">
+    <!-- CSRFトークンをmetaタグで埋め込む -->
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
     <!-- 画像 -->
     <div class="image-container">
         <img id="photo" src="https://placehold.jp/1920x1080.png" alt="Image">
@@ -31,5 +29,4 @@
 
     <!-- JSファイルを読み込む -->
     <script src="{% static 'js/sinia_home.js' %}"></script>
-</body>
-</html>
+{% endblock %}

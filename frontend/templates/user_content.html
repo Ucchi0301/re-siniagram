@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ユーザー詳細</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/user_content.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>ユーザー詳細</h1>
+        <div id="user-detail"></div> <!-- ユーザー詳細情報を表示 -->
+        <h2>投稿一覧</h2>
+        <div id="post-list"></div> <!-- ユーザーの投稿情報を表示 -->
+    </div>
+
+    <script src="{% static 'js/user_content.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投稿詳細</title>
+    {% load static %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body>
+    <div class="container">
+        <h1>投稿詳細</h1>
+        <div class="post-detail">
+            <img id="post-image" src="" alt="投稿画像">
+            <p><strong>投稿者:</strong> <span id="createdBy"></span></p>
+            <p><strong>作成日時:</strong> <span id="createdAt"></span></p>
+            <p><strong>詳細:</strong> <span id="description"></span></p>
+        </div>
+
+        <button id="delete-button">削除</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // CSRFトークンを取得
+            function getCSRFToken() {
+                return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            }
+
+            // URL から投稿 ID（UUID）を取得
+            const postId = window.location.pathname.split('/')[2]; // URLからUUIDを取得
+
+            // 投稿詳細を取得する関数
+            function fetchPostDetail() {
+                $.ajax({
+                    url: `/api/post/${postId}/`,
+                    type: 'GET',
+                    headers: {
+                        'accept': 'application/json',
+                        'X-CSRFTOKEN': getCSRFToken(),
+                    },
+                    success: function(data) {
+                        // 取得した投稿情報をHTMLに埋め込む
+                        $('#post-image').attr('src', data.image);
+                        $('#createdBy').text(data.createdBy.username);
+                        $('#createdAt').text(new Date(data.createdAt).toLocaleString());
+                        $('#description').text(data.description);
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                        alert('投稿情報の取得に失敗しました。');
+                    }
+                });
+            }
+
+            // 投稿詳細情報を取得
+            fetchPostDetail();
+
+            // 投稿削除
+            $('#delete-button').click(function() {
+                $.ajax({
+                    url: `/api/post/${postId}/`,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRFTOKEN': getCSRFToken(),
+                    },
+                    success: function(response) {
+                        alert('投稿が削除されました。');
+                        window.location.href = '/posts/';
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                        alert('投稿の削除に失敗しました。');
+                    }
+                });
+            });
+
+            // 編集ボタンの処理
+            $('#edit-button').click(function() {
+                window.location.href = `/post/edit/${postId}/`; // 編集ページへ遷移
+            });
+        });
+    </script>
+</body>
+</html>
