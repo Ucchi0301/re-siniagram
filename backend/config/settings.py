@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ['*'] 
-CSRF_TRUSTED_ORIGINS = ["https://1068-2400-2410-3ac1-4000-abb-36d7-edf5-56f8.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["https://d27f-2400-2410-3ac1-4000-ac38-1fa2-4f5c-3f76.ngrok-free.app"]
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'storages',
     'pwa',
     "django.contrib.sites",
     "allauth",
@@ -133,13 +134,39 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = "static/"
+"""AWS S3の設定"""
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+STORAGES = {
+    # メディアファイルはS3ストレージ
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "location": "media/images", 
+        },
+    },
+    # 静的ファイルはローカルストレージ
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/media/"
+
+
+# """古のMedia設定 Django ver.4.2以降からはSTORAGES推奨"""
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+"""Staticの設定"""
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [
-    BASE_DIR / "frontend" / "static",
+    os.path.join(BASE_DIR, 'frontend', 'static'),
 ]
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
