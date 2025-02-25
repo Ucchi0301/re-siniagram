@@ -1,7 +1,6 @@
 // 画像の縦向き・横向きを確認する関数
 const img = document.getElementById('photo');
 
-// 画像が読み込まれた後に動作する
 function imageRotate() {
     const width = img.naturalWidth;
     const height = img.naturalHeight;
@@ -9,20 +8,20 @@ function imageRotate() {
     if (width > height) {
         // 横向きの画像の場合: 90度回転
         img.style.transform = 'rotate(90deg)';
-        img.style.width = '80vh';  // 回転後の横幅を画面いっぱいに設定
-        img.style.height = 'auto';  // 高さも100%に設定
+        img.style.width = '80vh';
+        img.style.height = 'auto';
     } else if (width < height) {
         // 縦向きの画像の場合: そのまま表示
         img.style.transform = 'none';
-        img.style.width = 'auto';   // 幅を画面いっぱいに
-        img.style.height = '80vh';  // 高さも100%に設定
+        img.style.width = 'auto';
+        img.style.height = '80vh';
     } else {
-        // 縦と横が同じ場合（正方形の画像）
-        img.style.transform = 'none';  // 回転なし
-        img.style.width = '100%';      // 幅を100%に設定
-        img.style.height = 'auto';     // 高さを自動調整
+        // 正方形の画像の場合
+        img.style.transform = 'none';
+        img.style.width = '100%';
+        img.style.height = 'auto';
     }
-};
+}
 
 // CSRFトークンを取得する関数
 function getCSRFToken() {
@@ -30,27 +29,48 @@ function getCSRFToken() {
 }
 
 $(document).ready(function () {
-    const csrftoken = getCSRFToken(); // CSRFトークンを取得
-
+    const csrftoken = getCSRFToken();
     let isFetching = false; // リクエスト中フラグ
 
+    // 初期状態で画像にぼかしを適用（CSSで.blurredにフィルター指定しておく）
+    $('#photo').addClass('blurred');
+
     function fetchRandomPost() {
+        $('#spinner').show(); // ローディングスピンを表示
         $.ajax({
-            url: '/api/post/random/', // APIエンドポイント
+            url: '/api/post/random/',
             type: 'GET',
             headers: {
                 'X-CSRFToken': csrftoken
             },
             success: function (data) {
                 if (data.image) {
+                    // 画像読み込み完了時のイベントを設定（キャッシュ対応のためcompleteチェックも）
+                    $('#photo').off('load').one('load', function() {
+                        imageRotate();
+                        $('#spinner').hide(); // ローディングスピンを非表示
+                        isFetching = false;
+                        $('#fetchRandomPost').prop('disabled', false).removeClass('pressed');
+                        // 画像読み込み完了でぼかし解除
+                        $(this).removeClass('blurred');
+                    });
                     $('#photo').attr('src', data.image);
+                    // キャッシュの場合、すでに読み込み済みなら即時loadイベントを発火
+                    if ($('#photo')[0].complete) {
+                        $('#photo').trigger('load');
+                    }
+                } else {
+                    $('#spinner').hide();
+                    isFetching = false;
+                    $('#fetchRandomPost').prop('disabled', false).removeClass('pressed');
+                    $('#photo').removeClass('blurred');
                 }
-                isFetching = false; // フラグ解除
-                $('#fetchRandomPost').prop('disabled', false); // ボタンを有効化
             },
             error: function () {
-                isFetching = false; // フラグ解除
-                $('#fetchRandomPost').prop('disabled', false); // ボタンを有効化
+                $('#spinner').hide();
+                isFetching = false;
+                $('#fetchRandomPost').prop('disabled', false).removeClass('pressed');
+                $('#photo').removeClass('blurred');
             }
         });
     }
@@ -58,71 +78,51 @@ $(document).ready(function () {
     // 初期ロード時にリクエストを実行
     fetchRandomPost();
 
-    // 画像読み込み後に回転を適用
-    $('#photo').on('load', function() {
-        imageRotate();
-    });
-
-    // ボタンのクリックイベント
     const button = $('#fetchRandomPost');
 
+    // mousedown/touchstart時にボタンを「押し込んだ」状態にする
     button.on('mousedown touchstart', function () {
-        $(this).addClass('pressed'); // 押した状態のクラスを追加
+        if (!$(this).hasClass('pressed')) {
+            $(this).addClass('pressed');
+        }
     });
 
-    button.on('mouseup touchend', function () {
-        $(this).removeClass('pressed'); // 押した状態のクラスを削除
-    });
+    // mouseup/touchendではクラス削除はせず、AJAX完了時に削除する
 
     button.on('click', function (event) {
         if (isFetching) {
-            event.preventDefault(); // リクエスト中は無効化
+            event.preventDefault();
             return;
         }
-
-        isFetching = true; // フラグを設定
-        $(this).prop('disabled', true); // ボタンを無効化
+        // 再取得時は画像に再度ぼかしを適用
+        $('#photo').addClass('blurred');
+        isFetching = true;
+        $(this).prop('disabled', true);
         fetchRandomPost();
     });
 
-    // ボタン領域でのタッチイベントを監視
     $('#fetchRandomPost').on('touchstart', function (event) {
-        // タッチされた指の数を取得
         const touchCount = event.touches.length;
-
-        // 1本の指でのタップ：通常のクリック動作
         if (touchCount === 1) {
-            if (isFetching) return;  // 既にリクエスト中なら処理しない
-
-            isFetching = true;  // フラグを立てて処理中にする
-            $('#fetchRandomPost').prop('disabled', true); // ボタンを無効にする
+            if (isFetching) return;
+            $('#photo').addClass('blurred');
+            isFetching = true;
+            $(this).prop('disabled', true);
             fetchRandomPost();
-
-            // `touchstart` が発生した場合、`click` イベントは無視
-            event.preventDefault(); // クリックイベントが発火しないようにする
+            event.preventDefault();
         }
-
-        // 2本以上の指でのタッチ：長押しを許可
         if (touchCount >= 2) {
-            if (isFetching) return;  // 既にリクエスト中なら処理しない
-
-            isFetching = true;  // フラグを立てて処理中にする
-            $('#fetchRandomPost').prop('disabled', true); // ボタンを無効にする
+            if (isFetching) return;
+            $('#photo').addClass('blurred');
+            isFetching = true;
+            $(this).prop('disabled', true);
             fetchRandomPost();
         }
     });
 
-    // `touchend` イベントは無視する
     $('#fetchRandomPost').on('touchend', function (event) {
         if (isFetching) {
-            event.preventDefault(); // リクエストが送信された場合、`touchend` での処理を無効にする
-        }
-    });
-
-    // `click` イベントを無視
-    $('#fetchRandomPost').on('click', function (event) {
-        if (isFetching) {
-            event.preventDefault(); // クリックイベントでリクエストを送らない
+            event.preventDefault();
         }
     });
 });
