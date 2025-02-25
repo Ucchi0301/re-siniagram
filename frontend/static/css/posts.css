@@ -1,39 +1,77 @@
-.container {
-    width: 80%;
-    margin: 0 auto;
-}
-
-h1 {
+/* リセットと基本スタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
     color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-#post-list {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.post-card {
+    line-height: 1.6;
+  }
+  
+  /* コンテナの幅を最大1200pxにし中央寄せ */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* ページタイトルのスタイル */
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40px;
+    color: #444;
+  }
+  
+  /* 投稿リストをグリッドレイアウトで配置 */
+  #post-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  /* 各投稿カードのスタイル */
+  .post-item {
     background: #fff;
-    padding: 15px;
-    margin: 10px;
-    border-radius: 10px;
-    width: 250px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.post-image img {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .post-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* 画像のスタイル */
+  .post-item img {
     width: 100%;
     height: auto;
-    border-radius: 5px;
-}
-
-.post-info p {
-    margin: 5px 0;
-}
-
-.post-card:hover {
-    transform: scale(1.05);
-    transition: 0.3s;
-}
+    display: block;
+  }
+  
+  /* 投稿情報のスタイル */
+  .post-item p {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  /* リンク全体をクリック可能に */
+  .post-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  /* レスポンシブ調整 */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 28px;
+    }
+  }
+  
