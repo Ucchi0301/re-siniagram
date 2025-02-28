@@ -75,3 +75,7 @@
 .preview-item .btn-danger:hover {
     opacity: 1; /* ホバー時は透明度を解除 */
 }
+
+.body {
+    padding-bottom: 70px;
+}

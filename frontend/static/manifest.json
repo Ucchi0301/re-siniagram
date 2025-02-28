@@ -7,12 +7,12 @@
     "theme_color": "#000000",
     "icons": [
         {
-            "src": "/media/icon/small.png",
+            "src": "https://resiniagram.s3.ap-northeast-3.amazonaws.com/media/icon/S.%E3%83%AF%E3%82%A4%E3%83%AB%E3%83%89%E3%82%AD%E3%83%A3%E3%83%83%E3%83%88.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/media/icon/large.png",
+            "src": "https://resiniagram.s3.ap-northeast-3.amazonaws.com/media/icon/S.%E3%83%AF%E3%83%B3%E3%83%80%E3%83%BC.png",
             "sizes": "512x512",
             "type": "image/png"
         }

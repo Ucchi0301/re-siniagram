@@ -10,6 +10,7 @@
     background-color: #f4f4f4;
     color: #333;
     line-height: 1.6;
+    padding-bottom: 70px;
   }
   
   /* コンテナの幅を最大1200pxにし中央寄せ */
@@ -57,7 +58,7 @@
   
   /* 投稿情報のスタイル */
   .post-item p {
-    padding: 10px 15px;
+    padding: 10px;
     font-size: 14px;
   }
   

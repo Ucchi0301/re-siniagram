@@ -97,7 +97,7 @@
                 success: function(data) {
                     // ユーザーがグループに参加している場合は/test/にリダイレクト
                     if (data.isUserInGroup) {
-                        window.location.href = '/test/';
+                        window.location.href = '/';
                     } else {
                         // グループに参加していない場合、フォームを表示
                         $('#content').show();

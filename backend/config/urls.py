@@ -27,11 +27,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("api/", include("api.urls")),
-    path("", TemplateView.as_view(template_name="sinia_home.html"), name="home"),
+    path("sinia/", TemplateView.as_view(template_name="sinia_home.html"), name="home"),
     path(
         "post_content/",
         TemplateView.as_view(template_name="post_content.html"),
-        name="post",
+        name="post_content",
     ),
     path(
         "group_top/",
@@ -51,12 +51,12 @@ urlpatterns = [
     path(
         "group_users/",
         TemplateView.as_view(template_name="group_users.html"),
-        name="post",
+        name="group_users",
     ),
     path(
         "posts/",
         TemplateView.as_view(template_name="posts.html"),
-        name="post",
+        name="posts",
     ),
     path(
         "post/<uuid:id>/",
@@ -69,9 +69,9 @@ urlpatterns = [
         name="post",
     ),
     path(
-        "test/",
+        "",
         TemplateView.as_view(template_name="test_top.html"),
-        name="post",
+        name="test",
     ),
     
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0),
