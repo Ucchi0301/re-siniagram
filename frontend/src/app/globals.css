@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@layer utilities {
+  @keyframes pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-pop {
+    animation: pop 0.5s ease-out forwards;
+  }
+
+  .animation-delay-\[500ms\] {
+    animation-delay: 500ms;
+  }
+
+  .animation-delay-\[1000ms\] {
+    animation-delay: 1000ms;
+  }
+
+  .animation-delay-\[2000ms\] {
+    animation-delay: 2000ms;
+  }
+
+  .animation-delay-\[2600ms\] {
+    animation-delay: 2600ms;
+  }
+}
