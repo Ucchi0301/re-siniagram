@@ -12,6 +12,9 @@ class MUser(AbstractBaseUser, PermissionsMixin, UUIDModelMixin, TimeStampModelMi
     avatar = models.ImageField(blank=True, null=True)
     email = models.EmailField(unique=True)
     click_count = models.IntegerField(default=0)
+    
+    is_staff = models.BooleanField(default=False)  # ← 追加
+    is_active = models.BooleanField(default=True)  # ← 追加
 
     objects = UserManager()
     USERNAME_FIELD = "email"
