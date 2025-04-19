@@ -8,7 +8,14 @@ from drf_yasg.utils import swagger_auto_schema
 from common.models import MUser, PostContent
 
 from ..permissions import IsInGroup
+from rest_framework.permissions import IsAuthenticated
 
+class UserSelfView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
 
 # ユーザー詳細取得
 @swagger_auto_schema(
