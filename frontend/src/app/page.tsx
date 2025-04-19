@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function WelcomePage() {
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-gradient-to-br from-[#e0f2fe] via-white to-[#fef9c3] text-gray-800 text-center font-sans">
@@ -26,17 +28,22 @@ export default function WelcomePage() {
           PokaPoka
         </h1>
         <p className="text-base sm:text-lg font-normal leading-relaxed text-gray-600 max-w-md mb-10 drop-shadow-sm">
-          写真で家族をつなげる。<br />
+          写真で家族をつなげる。
+          <br />
           やさしい想い出が、世代を超えて広がるアプリです。
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold py-3 px-10 rounded-full shadow-md animate-glow transition-all duration-300">
-            はじめての方へ
-          </button>
-          <button className="bg-white text-blue-700 text-lg font-semibold py-3 px-10 rounded-full border border-blue-300 shadow animate-pulse-smooth hover:bg-blue-50 transition-all duration-300">
-            ログイン
-          </button>
+          <Link href="/signin">
+            <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold py-3 px-10 rounded-full shadow-md animate-glow transition-all duration-300">
+              はじめての方へ
+            </button>
+          </Link>
+          <Link href="/login">
+            <button className="w-full sm:w-auto bg-white text-blue-700 text-lg font-semibold py-3 px-10 rounded-full border border-blue-300 shadow animate-pulse-smooth hover:bg-blue-50 transition-all duration-300">
+              ログイン
+            </button>
+          </Link>
         </div>
       </div>
 
